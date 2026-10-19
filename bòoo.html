@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lovely</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #151515;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #e0e0e0;
+        }
+
+        /* Màn hình khóa xoay ngang chuẩn trang gốc */
+        #rotate-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #151515;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .phone-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+            fill: #a0a0a0;
+            animation: rotatePhone 2.3s ease-in-out infinite;
+        }
+        #rotate-overlay h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        #rotate-overlay p {
+            font-size: 0.95rem;
+            opacity: 0.6;
+        }
+
+        @keyframes rotatePhone {
+            0% { transform: rotate(0deg); }
+            40% { transform: rotate(-90deg); }
+            70% { transform: rotate(-90deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Không gian hiển thị nội dung chính */
+        #main-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #151515;
+        }
+
+        /* Hộp Sticker động ở giữa màn hình giống trang gốc */
+        #sticker-container {
+            margin-bottom: 30px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .heart-sticker {
+            font-size: 4.5rem;
+            animation: pulseSticker 1.2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 10px rgba(245, 132, 183, 0.3));
+        }
+
+        @keyframes pulseSticker {
+            0% { transform: scale(0.9); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Khung hiển thị lời nhắn nhủ dịch chuyển mượt mà */
+        #message-box {
+            z-index: 10;
+            text-align: center;
+            max-width: 85%;
+            padding: 10px;
+        }
+        .message-line {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #e5e5e5;
+            margin: 12px 0;
+            min-height: 2.2rem;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            opacity: 0.95;
+        }
+        
+        /* Dòng chữ cuối làm nổi bật bằng tone màu hồng ngọt ngào */
+        #line4 {
+            color: #f584b7;
+            font-weight: 500;
+        }
+
+        /* Nhận diện góc xoay ngang để kích hoạt giao diện */
+        @media screen and (orientation: landscape) {
+            #rotate-overlay { display: none; }
+            #main-content { display: flex; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Giao diện cảnh báo xoay màn hình điện thoại -->
+    <div id="rotate-overlay">
+        <svg class="phone-icon" viewBox="0 0 24 24">
+            <path d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm-2 20h-4v-1h4v1zm3-3H7V4h10v14z"/>
+        </svg>
+        <h2>Rotate phone</h2>
+        <p>Vui lòng xoay ngang màn hình!</p>
+    </div>
+
+    <!-- Khu vực hiệu ứng chuẩn của trang mẫu -->
+    <div id="main-content">
+        <!-- Hộp quà trái tim động trung tâm -->
+        <div id="sticker-container">
+            <div class="heart-sticker">💝</div>
+        </div>
+        
+        <!-- Khung chữ gõ máy xuất hiện tuần tự theo yêu cầu -->
+        <div id="message-box">
+            <div id="line1" class="message-line"></div>
+            <div id="line2" class="message-line"></div>
+            <div id="line3" class="message-line"></div>
+            <div id="line4" class="message-line"></div>
+        </div>
+    </div>
+
+    <script>
+        // Cấu hình nội dung chữ hiển thị chính xác theo yêu cầu phân tách dòng của bạn
+        const config = {
+            line1: "Hello cdangg ><",
+            line2: "Nay cdangg có mệt khom .",
+            line3: "Cdangg nhớ tui khom",
+            line4: "Yeuu nhiều aaa💗"
+        };
+
+        // Hiệu ứng gõ chữ từng ký tự mượt mà giống trang gốc
+        function typeWriter(text, elementId, speed, delay, callback) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            element.innerHTML = "";
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed); 
+                } else if (callback) {
+                    setTimeout(callback, delay);
+                }
+            }
+            type();
+        }
+
+        // Chạy hiệu ứng hiển thị liên hoàn cả 4 dòng chữ
+        function startLoveAnimation() {
+            // Tốc độ gõ chữ là 90ms mỗi ký tự, thời gian nghỉ giữa các câu là 500ms
+            typeWriter(config.line1, "line1", 90, 500, () => {
+                typeWriter(config.line2, "line2", 90, 500, () => {
+                    typeWriter(config.line3, "line3", 90, 500, () => {
+                        typeWriter(config.line4, "line4", 90, 500);
+                    });
+                });
+            });
+        }
+
+        // Kích hoạt chạy chữ ngay khi thiết bị đổi sang trạng thái nằm ngang
+        window.addEventListener('load', () => {
+            // Kiểm tra nếu ban đầu vào trang đã nằm ngang sẵn thì chạy luôn
+            if (window.innerWidth > window.innerHeight) {
+                startLoveAnimation();
+            }
+        });
+
+        // Lắng nghe sự thay đổi kích thước/góc xoay để tự kích hoạt lại mượt mà
+        let animated = false;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > window.innerHeight && !animated) {
+                animated = true;
+                setTimeout(startLoveAnimation, 300);
+            }
+        });
+    </script>
+</body>
+</html>
