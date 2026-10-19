@@ -19,7 +19,7 @@
             color: #e0e0e0;
         }
 
-        /* Màn hình khóa xoay ngang chuẩn trang gốc */
+        /* Màn hình khóa bắt buộc xoay ngang giống hệt trang gốc */
         #rotate-overlay {
             position: fixed;
             top: 0;
@@ -61,7 +61,7 @@
             100% { transform: rotate(0deg); }
         }
 
-        /* Không gian hiển thị nội dung chính */
+        /* Giao diện chính */
         #main-content {
             position: relative;
             width: 100%;
@@ -73,23 +73,26 @@
             background-color: #151515;
         }
 
-        /* Hộp Sticker động ở giữa màn hình giống trang gốc */
+        /* Khung chứa Sticker động ở trung tâm */
         #sticker-container {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 120px;
         }
-        .heart-sticker {
-            font-size: 4.5rem;
-            animation: pulseSticker 1.2s ease-in-out infinite alternate;
-            filter: drop-shadow(0 0 10px rgba(245, 132, 183, 0.3));
+        
+        /* Đồ họa Sticker hoạt họa nhịp tim đập nhẹ mượt mà */
+        .animated-heart {
+            width: 90px;
+            height: 90px;
+            animation: pulseSticker 1.4s ease-in-out infinite alternate;
         }
 
         @keyframes pulseSticker {
-            0% { transform: scale(0.9); }
-            100% { transform: scale(1.1); }
+            0% { transform: scale(0.93); filter: drop-shadow(0 0 5px rgba(245,132,183,0.2)); }
+            100% { transform: scale(1.07); filter: drop-shadow(0 0 20px rgba(245,132,183,0.5)); }
         }
 
         /* Khung hiển thị lời nhắn nhủ dịch chuyển mượt mà */
@@ -100,7 +103,7 @@
             padding: 10px;
         }
         .message-line {
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 400;
             color: #e5e5e5;
             margin: 12px 0;
@@ -110,13 +113,13 @@
             opacity: 0.95;
         }
         
-        /* Dòng chữ cuối làm nổi bật bằng tone màu hồng ngọt ngào */
+        /* Dòng chữ cuối làm nổi bật bằng tone màu hồng mộng mơ */
         #line4 {
             color: #f584b7;
             font-weight: 500;
         }
 
-        /* Nhận diện góc xoay ngang để kích hoạt giao diện */
+        /* Nhận diện góc xoay ngang để hiển thị */
         @media screen and (orientation: landscape) {
             #rotate-overlay { display: none; }
             #main-content { display: flex; }
@@ -134,14 +137,16 @@
         <p>Vui lòng xoay ngang màn hình!</p>
     </div>
 
-    <!-- Khu vực hiệu ứng chuẩn của trang mẫu -->
+    <!-- Giao diện chính của trang mẫu -->
     <div id="main-content">
-        <!-- Hộp quà trái tim động trung tâm -->
+        <!-- Sticker Trái tim hoạt họa vector sắc nét ở chính giữa màn hình -->
         <div id="sticker-container">
-            <div class="heart-sticker">💝</div>
+            <svg class="animated-heart" viewBox="0 0 100 100">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#f584b7" transform="scale(3.8) translate(2, 2)"/>
+            </svg>
         </div>
         
-        <!-- Khung chữ gõ máy xuất hiện tuần tự theo yêu cầu -->
+        <!-- Khung chữ gõ máy xuất hiện tuần tự đúng nội dung yêu cầu -->
         <div id="message-box">
             <div id="line1" class="message-line"></div>
             <div id="line2" class="message-line"></div>
@@ -151,7 +156,7 @@
     </div>
 
     <script>
-        // Cấu hình nội dung chữ hiển thị chính xác theo yêu cầu phân tách dòng của bạn
+        // Cấu hình nội dung hiển thị chính xác theo từng dòng chữ của bạn
         const config = {
             line1: "Hello cdangg ><",
             line2: "Nay cdangg có mệt khom .",
@@ -159,7 +164,7 @@
             line4: "Yeuu nhiều aaa💗"
         };
 
-        // Hiệu ứng gõ chữ từng ký tự mượt mà giống trang gốc
+        // Hiệu ứng gõ chữ mượt và khựng nhẹ cơ học giống bản gốc
         function typeWriter(text, elementId, speed, delay, callback) {
             let i = 0;
             const element = document.getElementById(elementId);
@@ -176,32 +181,32 @@
             type();
         }
 
-        // Chạy hiệu ứng hiển thị liên hoàn cả 4 dòng chữ
+        // Chạy tuần tự và đồng bộ cả 4 dòng chữ
         function startLoveAnimation() {
-            // Tốc độ gõ chữ là 90ms mỗi ký tự, thời gian nghỉ giữa các câu là 500ms
-            typeWriter(config.line1, "line1", 90, 500, () => {
-                typeWriter(config.line2, "line2", 90, 500, () => {
-                    typeWriter(config.line3, "line3", 90, 500, () => {
-                        typeWriter(config.line4, "line4", 90, 500);
+            // Tốc độ gõ chữ 85ms/ký tự, khoảng nghỉ giữa các câu là 600ms giống hệt link gốc
+            typeWriter(config.line1, "line1", 85, 600, () => {
+                typeWriter(config.line2, "line2", 85, 600, () => {
+                    typeWriter(config.line3, "line3", 85, 600, () => {
+                        typeWriter(config.line4, "line4", 85, 600);
                     });
                 });
             });
         }
 
-        // Kích hoạt chạy chữ ngay khi thiết bị đổi sang trạng thái nằm ngang
+        // Tự động kiểm tra trạng thái màn hình khi bắt đầu tải trang
+        let animated = false;
         window.addEventListener('load', () => {
-            // Kiểm tra nếu ban đầu vào trang đã nằm ngang sẵn thì chạy luôn
-            if (window.innerWidth > window.innerHeight) {
+            if (window.innerWidth > window.innerHeight && !animated) {
+                animated = true;
                 startLoveAnimation();
             }
         });
 
-        // Lắng nghe sự thay đổi kích thước/góc xoay để tự kích hoạt lại mượt mà
-        let animated = false;
+        // Theo dõi sự kiện xoay màn hình để kích hoạt hiệu ứng chạy chữ kịp thời
         window.addEventListener('resize', () => {
             if (window.innerWidth > window.innerHeight && !animated) {
                 animated = true;
-                setTimeout(startLoveAnimation, 300);
+                setTimeout(startLoveAnimation, 400); // Tạo độ trễ nhẹ khi lật màn hình cho mượt
             }
         });
     </script>
